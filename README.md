@@ -1,6 +1,6 @@
 # 今语云音乐
 
-![Github stars](https://img.shields.io/github/stars/sadjjk/JinyuMusic.svg)![GitHub last commit](https://img.shields.io/github/last-commit/sadjjk/JinyuMusic)![GitHub forks](https://img.shields.io/github/forks/sadjjk/JinyuMusic?style=social)
+![Github stars](https://img.shields.io/github/stars/sadjjk/JinyuMusic.svg)   ![GitHub last commit](https://img.shields.io/github/last-commit/sadjjk/JinyuMusic)   ![GitHub forks](https://img.shields.io/github/forks/sadjjk/JinyuMusic?style=social)
 
 [在线聚合音乐平台](http://www.wjinyu.top:666/)
 
@@ -31,3 +31,56 @@
 后端使用Python  Flask框架
 
 前端使用了最简单的HTML、JS
+
+### 设计
+
+目前已接入7大音乐平台
+
+1. 网易云音乐
+2. QQ音乐
+3. 咪咕音乐
+4. 虾米音乐 (2021年2月将下线)
+5. 酷狗音乐
+6. 酷我音乐
+7. 千千音乐
+
+支持全网的音乐搜索、歌单推荐、排行榜、歌手详情、专辑详情
+
+**当然该花钱的还是要花钱去听**
+
+在探索过程中 
+
+个别接口都是连蒙带猜的
+
+花费了不少时间和精力
+
+如果你觉得很赞 
+
+不妨Star一下
+
+### 感谢
+
+非常感谢以下使用到的开源项目以及帮助过我的朋友们
+
+[Listen 1 ](http://listen1.github.io/listen1/): [http://listen1.github.io/listen1](http://listen1.github.io/listen1/)
+
+[APlayer ](https://aplayer.js.org/): [https://aplayer.js.org](https://aplayer.js.org/)
+
+[cschensai](https://github.com/cschensai):https://github.com/cschensai
+
+### 吐槽
+
+既想让人知道 又不想让太多人知道的矛盾心情
+
+就像喜欢的小众歌手 一下子人尽皆知
+
+反而自己高兴不来了
+
+这样的聚合服务始终是上不了台面
+
+如果用的人过多 
+
+随之到来的就是版权律师函问题
+
+所以 **仅供学习 请勿商用**
+
