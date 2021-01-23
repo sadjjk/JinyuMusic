@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <title class="ng-binding">今语云音乐 TodayMusic</title>
+    <link href="/static/css/hotkeys.css" rel="stylesheet">
+    <link href="/static/css/icon.css" rel="stylesheet">
+    <link href="/static/css/common.css" rel="stylesheet">
+    <link href="/static/css/APlayer.css" rel="stylesheet">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/underscore.js"></script>
+    <script src="/static/js/alert.js"></script>
+    <script src="/static/js/APlayer.js"></script>
+    <script src="/static/js/template.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/hotkey.js"></script>
+</head>
+
+<body>
+
+<div>
+    <div class="wrap">
+        <div class="shadow ng-hide"></div>
+        <div class="dialog ng-hide">
+            <div class="dialog-header">
+                <span></span>
+                <span class="dialog-close" onclick="closeDialog()">×</span>
+            </div>
+            <div class="dialog-body">
+                <ul class="dialog-playlist ng-hide my-playlist">
+                </ul>
+                <script id="my-playlist-more-tmpl" type="text/html">
+                    <li class="detail-add" data-from="" onclick="newMyPlaylistDialog()">
+                        <img src="/static/images/mycover.jpg">
+                        <h2 class="ng-binding"> 新建歌单 </h2>
+                    </li>
+                    {{ each playlists as playlist}}
+                    <li onclick="addMyPlaylist('{{playlist.playlist_id}}','{{from}}')" class="ng-scope">
+                        <img src="{{playlist.img_url}}">
+                        <h2> {{playlist.title}} </h2>
+                    </li>
+                    {{/each}}
+                </script>
+                <div class="dialog-newplaylist ng-hide">
+                    <input autofocus="autofocus" class="form-control" type="text"
+                           placeholder="输入新建歌单名称">
+                    <button class="btn btn-primary confirm-button " onclick="createMyPlaylist()">
+                        确认
+                    </button>
+                    <button class="btn btn-default " onclick="closeDialog()">取消</button>
+                </div>
+                <div class="dialog-editplaylist ng-hide">
+                    <div class="form-group">
+                        <label>歌单名称</label>
+                        <input class="form-control" type="text"
+                               placeholder="输入歌单名称">
+                    </div>
+                    <button class="btn btn-primary confirm-button "
+                            onclick="editMyPlaylist()">确认
+                    </button>
+                    <button class="btn btn-default " onclick="closeDialog()">取消</button>
+                </div>
+                <div class="dialog-open-url ng-hide">
+                    <div class="form-group">
+                        <label>歌单链接</label>
+                        <input class="form-control " type="text">
+                    </div>
+                    <p>仅支持网易云或QQ的自定义歌单 例如 <br>QQ音乐<br>https://y.qq.com/n/yqq/playlist/<br>3798079654.html<br>网易云音乐<br>https://music.163.com/#/playlist?id=34631127</p>
+                    <button class="btn btn-primary confirm-button "
+                            onclick="loadPlaylistUrl()">确认
+                    </button>
+                    <button class="btn btn-default" onclick="closeDialog()">取消</button>
+                </div>
+                </ul>
+            </div>
+        </div>
+        <div class="main ">
+            <div class="sidebar">
+                <div class="flex-scroll-wrapper">
+                    <div class="menu-control"></div>
+                    <div class="menu-title">
+                        <div class="title">平台聚合</div>
+                    </div>
+                    <ul class="nav masthead-nav">
+                        <li onclick="showRecommendToplist(this)"><span class="icon li-featured-list"></span><a>排行榜</a>
+                        </li>
+                    </ul>
+                    <ul class="nav masthead-nav">
+                        <li class="active" onclick="showRecommendPlaylist(this)"><span
+                                class="icon li-featured-list"></span><a>推荐歌单</a></li>
+                    </ul>
+                    <div class="menu-title">
+                        <div class="title">我的歌单</div>
+                        <svg class="feather icon" onclick="newMyPlaylistDialog()">
+                            <use xlink:href="/static/images/feather-sprite.svg#plus-square"></use>
+                        </svg>
+                    </div>
+                    <ul class="nav masthead-nav my-playlist">
+                    </ul>
+                    <script id="my-playlist-tmpl" type="text/html">
+                        {{ each playlists as playlist}}
+                        <li id='{{playlist.playlist_id}}'
+                            onclick="showMyPlaylistDetail(this,'{{playlist.playlist_id}}')">
+                            <svg class="feather">
+                                <use xlink:href="/static/images/feather-sprite.svg#disc"></use>
+                            </svg>
+                            <a>{{playlist.title}}</a>
+                        </li>
+                        {{/each}}
+                    </script>
+                    <div class="menu-title">
+                        <div class="title ">收藏歌单</div>
+                        <svg class="feather icon" onclick="loadPlaylistDialog()">
+                            <use xlink:href="/static/images/feather-sprite.svg#plus-square"></use>
+                        </svg>
+                    </div>
+                    <ul class="nav masthead-nav favorite-playlist">
+                    </ul>
+                    <script id="favorite-playlist-tmpl" type="text/html">
+                        {{ each playlists as playlist}}
+                        <li onclick="showFavoriteDetail(this,'{{playlist.songlist_type}}','{{playlist.songlist_id}}','{{playlist.platform}}')">
+                            <svg class="feather">
+                                <use xlink:href="/static/images/feather-sprite.svg#disc"></use>
+                            </svg>
+                            <a>{{playlist.title}}</a>
+                        </li>
+                        {{/each}}
+                    </script>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="navigation">
+                    <!--                    todo 页面返回 前进-->
+                    <!--                    <div class="backfront">-->
+                    <!--                        <span class="icon li-back" ng-click="popWindow()"></span>-->
+                    <!--                        <span class="icon li-advance" ng-click="forwardWindow()"></span>-->
+                    <!--                    </div>-->
+                    <div class="search">
+                        <input class="form-control search-input"
+                               style="margin-left: 40px"
+                               id="search-input" type="text" ng-model="keywords" placeholder="输入歌曲名，歌手或专辑"
+                               onkeypress="search()">
+                    </div>
+                    <div class="settings" onclick="showSettings()">
+                        <span class="icon li-setting"></span>
+                    </div>
+                </div>
+
+                <div class="browser flex-scroll-wrapper">
+
+                    <!-- 推荐页 歌单或榜单-->
+                    <div class="recommand-page page ng-hide">
+                        <div class="source-list">
+                        </div>
+                        <script id="platforms-tmpl" type="text/html">
+                            {{ each platforms as platform}}
+                            <div id="{{platform.name}}" class="source-button "
+                                 onclick="{{func}}(this,'{{platform.name}}')">{{platform.title}}
+                            </div>
+                            <div class="splitter"></div>
+                            {{/each}}
+                        </script>
+                        <div class="site-wrapper-innerd">
+                            <div class="cover-container">
+                                <ul class="playlist-covers">
+                                    <script id="playlist-tmp" type="text/html">
+                                        {{ each playlists as playlist}}
+                                        <li class="ng-scope">
+                                            <div class="u-cover"><img
+                                                    src="{{ playlist.img_url }}"
+                                                    onclick="{{func}}('{{playlist.id}}','{{playlist.platform}}')">
+                                                <div class="bottom"
+                                                     onclick="{{func}}('{{playlist.id}}','{{playlist.platform}}')">
+                                                    <svg class="feather">
+                                                        <use xlink:href="/static/images/feather-sprite.svg#play-circle"></use>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="desc"><span class="title ng-binding"
+                                                                    onclick="{{func}}('{{playlist.id}}','{{playlist.platform}}')">{{playlist.title}}</span>
+                                            </div>
+                                        </li>
+                                        {{/each}}
+                                    </script>
+
+                                </ul>
+                                <div class="loading_bottom">
+                                    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg"
+                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                         width="40px" height="40px" viewBox="0 0 40 40"
+                                         enable-background="new 0 0 40 40" xml:space="preserve"> <path
+                                            opacity="0.2" fill="#000"
+                                            d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path>
+                                        <path fill="#000"
+                                              d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z"> <animateTransform
+                                                attributeType="xml" attributeName="transform" type="rotate"
+                                                from="0 20 20" to="360 20 20" dur="0.6s"
+                                                repeatCount="indefinite"></animateTransform> </path> </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 快速搜索 -->
+                    <div class="search-page page ng-hide">
+                        <div class="cover-container">
+                            <div class="searchbox">
+                                <ul class="source-list">
+                                </ul>
+                                <script id="search-platforms-tmpl" type="text/html">
+                                    <li class="source-button  {{if index == 0}} active {{/if}}"
+                                        onclick="searchKeyword(this,'')">平台聚合
+                                    </li>
+                                    <div class="splitter"></div>
+                                    {{ each platforms as platform}}
+                                    <li class="source-button  {{if index-1 == $index}} active {{/if}}"
+                                        onclick="searchKeyword(this,'{{platform.name}}')">{{platform.title}}
+                                    </li>
+                                    <div class="splitter"></div>
+                                    {{/each}}
+                                </script>
+
+                                <svg class="searchspinner ng-hide" version="1.1"
+                                     id="loader-1" xmlns="http://www.w3.org/2000/svg"
+                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     width="40px" height="40px" viewBox="0 0 40 40"
+                                     enable-background="new 0 0 40 40" xml:space="preserve"> <path
+                                        opacity="0.2" fill="#000"
+                                        d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"></path>
+                                    <path fill="#000"
+                                          d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z"> <animateTransform
+                                            attributeType="xml" attributeName="transform" type="rotate"
+                                            from="0 20 20" to="360 20 20" dur="0.6s"
+                                            repeatCount="indefinite"></animateTransform> </path> </svg>
+
+                                </ul>
+                                <ul class="detail-songlist">
+                                </ul>
+                                <script id="search-detail-tmpl" type="text/html">
+                                    <li class="head">
+                                        <div class="title"><a class="ng-binding">歌曲名</a></div>
+                                        <div class="source"><a class="ng-binding">来源</a></div>
+                                        <div class="artist"><a class="ng-binding">歌手</a></div>
+                                        <div class="album"><a class="ng-binding">专辑名</a></div>
+                                        <div class="tools ng-binding">操作</div>
+                                    </li>
+                                    {{ each search_list as song }}
+                                    <li class="ng-scope {{if $index % 2 == 0}} odd {{else}} even {{/if}}"
+                                        onmouseover="showPlaylistSongTools(this,{{isMyPlaylist}})">
+                                        <div class="platform ng-hide">{{song.platform}}</div>
+                                        <div class="song_id ng-hide">{{song.song_id}}</div>
+                                        <div class="img_url ng-hide">{{song.img_url}}</div>
+                                        <div class="title">
+                                            <a class="ng-binding ng-isolate-scope"
+                                               onclick="addSongToPlayer(this)">{{song.title}}</a>
+                                        </div>
+
+                                        <div class="source"><a class="ng-binding" href="{{song.source_url}}"
+                                                               target="_blank"
+                                                               style="text-decoration:none;color: var(--text-default-color)">{{song.platform_name}}</a>
+                                        </div>
+                                        <div class="artist"><a
+                                                onclick="showArtistlist('{{song.artist_id}}','{{song.platform}}')"
+                                                class="ng-binding"
+                                                data-value='{{song.artist_id}}'>{{song.artist}}</a></div>
+                                        <div class="album"><a
+                                                onclick="showAlbumlist('{{song.album_id}}','{{song.platform}}')"
+                                                class="ng-binding" data-value='{{song.album_id}}'>{{song.album}}</a>
+                                        </div>
+                                        <div class="tools">
+                                            <a title="添加到当前播放"
+                                               class="detail-add-button ng-isolate-scope ng-hide"
+                                               onclick="addSongToPlayer(this,0)">
+                                                <span class="icon li-add"></span>
+                                            </a>
+                                            <a title="添加到我的歌单" class="detail-fav-button ng-hide"
+                                               onclick="addMyPlaylistDialog('song',event)">
+                                                <span class="icon li-songlist"></span>
+                                            </a>
+                                            <a title="从歌单删除" class="detail-delete-button ng-hide "
+                                               onclick="removeSongFromMyPlaylist(this,'{{song.song_id}}','{{song.platform}}')">
+                                                <span class="icon li-del"></span>
+                                            </a>
+                                            <a title="链接" class="ng-hide" href="{{song.source_url}}"
+                                               target="_blank"
+                                               style="text-decoration:none">
+                                                <span class="icon li-link"></span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {{/each}}
+                                    <div class="search-pagination">
+                                        <button class="btn btn-sm btn-pagination"
+                                                onclick="searchPage('{{platform}}',{{previousPage}})"
+                                        > 上一页
+                                        </button>
+                                        <label class="ng-binding"> 第 {{curPage}} 页 </label>
+                                        <button class="btn btn-sm btn-pagination"
+                                                onclick="searchPage('{{platform}}',{{nextPage}})"
+                                        > 下一页
+                                        </button>
+                                    </div>
+                                </script>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 歌单详情页-->
+                    <div class="playlist-page page ng-hide">
+                        <div class="playlist-detail">
+                        </div>
+                        <script id="songlist-detail-tmpl" type="text/html">
+                            <div class="detail-head">
+                                <div class="detail-head-cover"><img
+                                        err-src="https://y.gtimg.cn/mediastyle/global/img/singer_300.png"
+                                        src="{{ songlist.img_url }}">
+                                </div>
+                                <div class="detail-head-title">
+                                    <div class="playlist-id ng-hide">{{songlist.playlist_id}}</div>
+                                    <h2>{{songlist.title}}</h2>
+                                    <div class="playlist-button-list">
+                                        <div class="playlist-button playadd-button">
+                                            <div class="play-list"
+                                                 onclick="addAllSongToPlayerList(1)">
+                                                <span class="icon li-play-s"></span>
+                                                播放全部
+                                            </div>
+                                            <div class="add-list" onclick="addAllSongToPlayerList(0)">
+                                                <span class="icon li-add"></span>
+                                            </div>
+                                        </div>
+                                        <div class="playlist-button clone-button {{if isMyPlaylist}} ng-hide {{/if}}"
+                                             onclick="addMyPlaylistDialog('{{from}}',event)">
+                                            <div class="play-list"><span class="icon li-songlist"></span>
+                                                <span>添加到我的歌单</span>
+                                            </div>
+                                        </div>
+                                        <div class="playlist-button edit-button {{if !isMyPlaylist}} ng-hide {{/if}}"
+                                             onclick="editMyPlaylistDialog()">
+                                            <div class="play-list">
+                                                <svg class="feather">
+                                                    <use xlink:href="/static/images/feather-sprite.svg#edit"></use>
+                                                </svg>
+                                                <span>编辑</span></div>
+                                        </div>
+                                        <div class="playlist-button edit-button {{if !isMyPlaylist}} ng-hide {{/if}}"
+                                             onclick="deleteMyPlaylist()">
+                                            <div class="play-list">
+                                                <svg class="feather">
+                                                    <use xlink:href="/static/images/feather-sprite.svg#delete"></use>
+                                                </svg>
+                                                <span>删除</span></div>
+                                        </div>
+                                        <div class="playlist-button fav-button {{if isMyPlaylist}} ng-hide {{/if}}"
+                                             onclick="createfavoriteList(this,'{{songlist_type}}','{{songlist_id}}','{{songlist.platform}}','{{songlist.title}}')">
+                                            <div class="play-list {{if isCollect}} favorited {{else}} notfavorite {{/if}}">
+                                                <svg class="feather">
+                                                    <use xlink:href="/static/images/feather-sprite.svg#star"></use>
+                                                </svg>
+                                                <span>{{if isCollect}} 已收藏 {{else}} 收藏 {{/if}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="playlist-button edit-button ng-isolate-scope {{if isMyPlaylist}} ng-hide {{/if}}"
+                                             onclick="window.open('{{songlist.source_url}}')">
+                                            <div class="play-list"><span class="icon li-link"></span>
+                                                <span>链接</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="playlist-desc">{{#songlist.description}}</div>
+                                </div>
+
+                            </div>
+                            <ul class="detail-songlist">
+                                <li class="head">
+                                    <div class="title"><a>歌曲名({{songlist.song_total}})</a>
+                                    </div>
+                                    <div class="source"><a>来源</a></div>
+                                    <div class="artist"><a>歌手</a></div>
+                                    <div class="album"><a>专辑名</a></div>
+                                    <div class="tools">操作</div>
+                                </li>
+                                {{ each songlist.song_list as song }}
+                                <li class="ng-scope {{if $index % 2 == 0}} odd {{else}} even {{/if}}"
+                                    onmouseover="showPlaylistSongTools(this,{{isMyPlaylist}})">
+                                    <div class="platform ng-hide">{{song.platform}}</div>
+                                    <div class="song_id ng-hide">{{song.song_id}}</div>
+                                    <div class="img_url ng-hide">{{song.img_url}}</div>
+                                    <div class="title">
+                                        <a class="ng-binding ng-isolate-scope" onclick="addSongToPlayer(this)">{{song.title}}</a>
+                                    </div>
+
+                                    <div class="source"><a class="ng-binding" href="{{song.source_url}}"
+                                                           target="_blank"
+                                                           style="text-decoration:none;color: var(--text-default-color)">{{song.platform_name}}</a>
+                                    </div>
+                                    <div class="artist"><a
+                                            onclick="showArtistlist('{{song.artist_id}}','{{song.platform}}')"
+                                            class="ng-binding"
+                                            data-value='{{song.artist_id}}'>{{song.artist}}</a></div>
+                                    <div class="album"><a
+                                            onclick="showAlbumlist('{{song.album_id}}','{{song.platform}}')"
+                                            class="ng-binding" data-value='{{song.album_id}}'>{{song.album}}</a>
+                                    </div>
+                                    <div class="tools">
+                                        <a title="添加到当前播放" class="detail-add-button ng-isolate-scope ng-hide"
+                                           onclick="addSongToPlayer(this,0)">
+                                            <span class="icon li-add"></span>
+                                        </a>
+                                        <a title="添加到我的歌单" class="detail-fav-button ng-hide"
+                                           onclick="addMyPlaylistDialog('song',event)">
+                                            <span class="icon li-songlist"></span>
+                                        </a>
+                                        <a title="从歌单删除" class="detail-delete-button ng-hide "
+                                           onclick="removeSongFromMyPlaylist(this,'{{song.song_id}}','{{song.platform}}')">
+                                            <span class="icon li-del"></span>
+                                        </a>
+                                        <a title="链接" class="ng-hide" href="{{song.source_url}}" target="_blank"
+                                           style="text-decoration:none">
+                                            <span class="icon li-link"></span>
+                                        </a>
+                                    </div>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </script>
+                    </div>
+
+                    <!--歌曲详情页-->
+                    <div class="songdetail-page page ng-hide">
+                        <div class="songdetail-wrapper coverbg">
+                        </div>
+                        <script id="song-detail-tmpl" type="text/html">
+                            <div class="bg ng-scope"
+                                 style="background-image: url({{cover}});"></div>
+                            <div class="close" onclick="closeSongDetailDialog()">
+                                <svg class="icon">
+                                    <use xlink:href="/static/images/feather-sprite.svg#chevron-down"></use>
+                                </svg>
+                            </div>
+                            <div class="playsong-detail">
+                                <div class="detail-head">
+                                    <div class="detail-head-cover"><img
+                                            err-src="/static/images/album.png"
+                                            src="{{cover}}">
+                                    </div>
+                                    <div class="detail-head-title">
+                                        <div class="playlist-button-list" style="margin-top: 10px;margin-left: 40px;">
+                                            <div class="playlist-button clone-button "
+                                                 onclick="addMyPlaylistDialog('nowplay',event)">
+                                                <div class="play-list"><span class="icon li-songlist"></span>
+                                                    <span>添加到我的歌单</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="detail-songinfo">
+                                    <h2>{{name}}</h2>
+                                    <div class="info">
+                                        <div class="singer"><span>歌手： </span><a
+                                                onclick="showArtistlist('{{artist_id}}','{{platform}}')"
+                                                class="ng-binding">{{artist}}</a></div>
+                                        <div class="album"><span>专辑名： </span><a
+                                                onclick="showAlbumlist('{{album_id}}','{{platform}}')"
+                                                class="ng-binding">{{album}}</a></div>
+                                    </div>
+                                    <div class="lyric" id="lyric" >
+                                        <div class="placeholder"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+
+                    <!-- 设置 -->
+                    <div class="setting-page page ng-hide">
+                        <div class="site-wrapper-innerd">
+                            <div class="cover-container">
+                                <div class="settings-title"><span class="ng-binding">备份歌单<span></span></span>
+                                </div>
+                                <div class="settings-content">
+                                    <p class="ng-binding">重装插件或清除缓存数据会导致我的歌单数据丢失，强烈建议在这些操作前，备份我的歌单。</p>
+                                    <div>
+                                        <button class="btn btn-primary confirm-button ng-binding"
+                                                onclick="backupMySettings()">导出到本地文件
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="settings-title"><span class="ng-binding">从备份恢复<span></span></span>
+                                </div>
+                                <div class="settings-content">
+                                    <p class="ng-binding">选择备份文件，恢复我的歌单。注意：恢复我的歌单会覆盖现有的歌单。</p>
+                                    <label class="upload-button ng-binding" for="my-file-selector">
+                                        <input id="my-file-selector" type="file" style="display:none;"
+                                               accept='.json'
+                                               onchange="importMySettings()">从本地文件导入
+                                    </label>
+                                </div>
+
+                                <div class="settings-title"><span>快捷键<span></span></span>
+                                </div>
+                                <div class="settings-content">
+                                    <button class="btn btn-primary confirm-button"
+                                            onclick="showCheatSheetDialog()">查看快捷键列表
+                                    </button>
+                                </div>
+                                <div class="settings-title"><span>关于<span></span></span>
+                                </div>
+                                <div class="settings-content">
+                                    <p> 今语云音乐 TodayMusic </p>
+                                    <p> 仅供学习 请勿商用!</p>
+                                    <p> 样式上主要借鉴了Listen 1的设计 在此基础上加入了排行榜等功能</p>
+                                    <p> 非常感谢以下使用到的开源项目以及帮助过我的朋友们</p>
+                                    <p><a href="http://listen1.github.io/listen1/" target="_blank"
+                                          style="text-decoration:none;color: var(--text-default-color)"> Listen 1 </a> :
+                                        <a href="http://listen1.github.io/listen1/" target="_blank"
+                                           style="text-decoration:none;color: var(--text-default-color)">
+                                            http://listen1.github.io/listen1</a></p>
+                                    <p><a href="https://aplayer.js.org" target="_blank"
+                                          style="text-decoration:none;color: var(--text-default-color)"> APlayer </a> :
+                                        <a href="https://aplayer.js.org" target="_blank"
+                                           style="text-decoration:none;color: var(--text-default-color)">
+                                            https://aplayer.js.org</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div id="Aplayer"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="cfp-hotkeys-container fade ">
+    <div class="cfp-hotkeys">
+        <h4 class="cfp-hotkeys-title ng-binding ng-scope">快捷键列表</h4>
+        <table>
+            <tbody>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">/</span></td>
+                <td class="cfp-hotkeys-text ">显示/隐藏快捷键列表</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">[</span></td>
+                <td class="cfp-hotkeys-text ">上一首</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">]</span></td>
+                <td class="cfp-hotkeys-text ">下一首</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">p</span></td>
+                <td class="cfp-hotkeys-text ">播放/暂停</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">q</span></td>
+                <td class="cfp-hotkeys-text ">静音/取消静音</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">w</span></td>
+                <td class="cfp-hotkeys-text ">切换播放模式（顺序/随机）</td>
+            </tr>
+            <tr>
+                <td class="cfp-hotkeys-keys"><span class="cfp-hotkeys-key">l</span></td>
+                <td class="cfp-hotkeys-text ">打开/关闭播放列表</td>
+            </tr>
+
+
+            <div class="cfp-hotkeys-close" onclick="closeCheatSheetDialog()">×</div>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    var ap = new APlayer
+    ({
+        element: document.getElementById('Aplayer'),
+        showlrc: true,
+        fixed: true,
+        loop: 'all',
+        preload: 'metadata',
+        audio: []
+    });
+</script>
+
+</html>

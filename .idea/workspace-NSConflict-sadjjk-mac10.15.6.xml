@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9945f957-6dec-492c-9c20-378141dec112" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="JupyterTrust" id="3cafb279-6eef-4c07-ab0b-b36bb89771b0" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="1280" />
+    <option name="y" value="-180" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
+  </component>
+  <component name="ProjectId" id="1lM7sNhcvEm07qc37LZq9iK20yE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Music/static/images" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.stylelint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.stylelint" value="" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Music/static/html" />
+      <recent name="$PROJECT_DIR$/Music" />
+      <recent name="$PROJECT_DIR$/platform" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Music/static/images" />
+      <recent name="$PROJECT_DIR$/Music/static/js" />
+      <recent name="$PROJECT_DIR$/Music/static/fonts" />
+      <recent name="$PROJECT_DIR$/Music/html/js" />
+      <recent name="$PROJECT_DIR$/Music/html" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.manage">
+    <configuration name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Music" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="netease" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Music" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/platform/netease.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="playlist" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Music" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Music/api_v1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Music/api_v1/playlist.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="qq" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Music" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/platform/qq.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Music" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.manage" />
+        <item itemvalue="Python.playlist" />
+        <item itemvalue="Python.netease" />
+        <item itemvalue="Python.qq" />
+        <item itemvalue="Python.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9945f957-6dec-492c-9c20-378141dec112" name="Default Changelist" comment="" />
+      <created>1603607547816</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603607547816</updated>
+      <workItem from="1603607550311" duration="19263000" />
+      <workItem from="1604232133384" duration="8406000" />
+      <workItem from="1604829084278" duration="9980000" />
+      <workItem from="1605010307152" duration="3000" />
+      <workItem from="1605417826258" duration="715000" />
+      <workItem from="1605418574570" duration="6670000" />
+      <workItem from="1605426013496" duration="110000" />
+      <workItem from="1605426217495" duration="1823000" />
+      <workItem from="1605428275961" duration="13452000" />
+      <workItem from="1605445392384" duration="7936000" />
+      <workItem from="1605948476649" duration="35723000" />
+      <workItem from="1606566179203" duration="1351000" />
+      <workItem from="1606567634287" duration="29305000" />
+      <workItem from="1607180514200" duration="11752000" />
+      <workItem from="1607239572046" duration="2449000" />
+      <workItem from="1607242603996" duration="3720000" />
+      <workItem from="1607246653889" duration="72000" />
+      <workItem from="1607246742455" duration="16321000" />
+      <workItem from="1607270195364" duration="450000" />
+      <workItem from="1607348291610" duration="42000" />
+      <workItem from="1607348350552" duration="2420000" />
+      <workItem from="1607395315339" duration="22000" />
+      <workItem from="1607520227199" duration="10679000" />
+      <workItem from="1607787363288" duration="22027000" />
+      <workItem from="1607870230325" duration="3266000" />
+      <workItem from="1607945169647" duration="2738000" />
+      <workItem from="1607949208751" duration="282000" />
+      <workItem from="1607958514101" duration="2000" />
+      <workItem from="1608778404161" duration="55000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1878" height="300" key="GridCell.Tab.0.bottom" timestamp="1607949490993">
+      <screen x="1440" y="-220" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="300" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.-220.1920.1080@1440.-220.1920.1080" timestamp="1607949490993" />
+    <state width="1878" height="300" key="GridCell.Tab.0.center" timestamp="1607949490992">
+      <screen x="1440" y="-220" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="300" key="GridCell.Tab.0.center/0.0.1440.900/1440.-220.1920.1080@1440.-220.1920.1080" timestamp="1607949490992" />
+    <state width="1878" height="300" key="GridCell.Tab.0.left" timestamp="1607949490991">
+      <screen x="1440" y="-220" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="300" key="GridCell.Tab.0.left/0.0.1440.900/1440.-220.1920.1080@1440.-220.1920.1080" timestamp="1607949490991" />
+    <state width="1878" height="300" key="GridCell.Tab.0.right" timestamp="1607949490993">
+      <screen x="1440" y="-220" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="300" key="GridCell.Tab.0.right/0.0.1440.900/1440.-220.1920.1080@1440.-220.1920.1080" timestamp="1607949490993" />
+    <state x="2134" y="75" width="532" height="490" key="find.popup" timestamp="1607946477938">
+      <screen x="1440" y="-220" width="1920" height="1080" />
+    </state>
+    <state x="2134" y="75" width="532" height="490" key="find.popup/0.0.1440.900/1440.-220.1920.1080@1440.-220.1920.1080" timestamp="1607946477938" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/platform/qq.py</url>
+          <line>241</line>
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/platform/qq.py</url>
+          <line>121</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/platform/qq.py</url>
+          <line>343</line>
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/platform/netease.py</url>
+          <line>406</line>
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Music/static/js/index.js</url>
+          <line>15</line>
+          <option name="timeStamp" value="107" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Music/static/js/index.js</url>
+          <line>8</line>
+          <option name="timeStamp" value="108" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Music$playlist.coverage" NAME="playlist Coverage Results" MODIFIED="1605944854765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Music/api_v1" />
+    <SUITE FILE_PATH="coverage/Music$manage.coverage" NAME="manage Coverage Results" MODIFIED="1607949254359" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Music$netease.coverage" NAME="netease Coverage Results" MODIFIED="1605447358678" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Music$test.coverage" NAME="test Coverage Results" MODIFIED="1604841031788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Music$qq.coverage" NAME="qq Coverage Results" MODIFIED="1605447204529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>[
+            {'song_id': song.get('songmid'),
+             'title': song.get('songname'),
+             'artist': song.get('singer')[0].get('name'),
+             'artist_id': song.get('singer')[0].get('mid'),
+             'album': song.get('albumname'),
+             'album_id': song.get('albummid'),
+             'img_url': self._get_img_url(song.get('albummid')),
+             'playable': self._is_playable(song.get('switch')),
+             'source_url': f&quot;https://y.qq.com/n/yqq/song/{song.get('songmid')}.html&quot;,
+             'platform': self.__class__.__name__,
+             'platform_name':self.__class__.title
+             } for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[
+            {'song_id': song.get('songmid'),
+             'title': song.get('songname'),
+             'album': song.get('albumname'),
+             'album_id': song.get('albummid'),
+             'img_url': self._get_img_url(song.get('albummid')),
+             'playable': self._is_playable(song.get('switch')),
+             'source_url': f&quot;https://y.qq.com/n/yqq/song/{song.get('data').get('songmid')}.html&quot;,
+             'platform': self.__class__.__name__,
+             'platform_name':self.__class__.title
+             } for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[
+            {'song_id': song.get('songmid'),
+             'title': song.get('songname'),
+             
+             'platform': self.__class__.__name__,
+             'platform_name':self.__class__.title
+             } for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[
+            {'song_id': song.get('songmid'),
+             'album': song.get('albumname'),
+             'album_id': song.get('albummid'),
+             'img_url': self._get_img_url(song.get('albummid')),
+             'playable': self._is_playable(song.get('switch')),
+             'source_url': f&quot;https://y.qq.com/n/yqq/song/{song.get('data').get('songmid')}.html&quot;,
+             'platform': self.__class__.__name__,
+             'platform_name':self.__class__.title
+             } for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[song  for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[
+            {'song_id': song.get('songmid'),
+             'title': song.get('songname'),
+             'artist': song.get('singer')[0].get('name'),
+             'artist_id': song.get('singer')[0].get('mid'),
+             'album': song.get('albumname'),
+             'album_id': song.get('albummid'),
+             'img_url': self._get_img_url(song.get('albummid')),
+             'playable': self._is_playable(song.get('switch')),
+             'source_url': f&quot;https://y.qq.com/n/yqq/song/{song.get('data').get('songmid')}.html&quot;,
+             'platform': self.__class__.__name__,
+             'platform_name':self.__class__.title
+             } for song in playlist_info.get('songlist')
+        ]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>current_app.send_static_file(html_file_name)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>make_response(current_app.send_static_file(html_file_name))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>request</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
