@@ -145,7 +145,6 @@ function showSongDetailDialog(flag = 1) {
                 }
             ));
 
-
             const lyric = parseLyric(curPlayingAp.lrc);
             loadLyric(lyric);
 
@@ -1363,4 +1362,32 @@ function importMySettings() {
         }
     };
     reader.readAsText(fileObject);
+}
+
+
+// 下载音乐
+function downloadMusic(obj) {
+    const content_div = $(obj).parent().parent();
+
+    const song_id = content_div.children('.song_id').text();
+    const platform = content_div.children('.platform').text();
+    const title = content_div.find('.title a').text();
+    const artist = content_div.find('.artist a').text();
+    var song_name = title + '-' + artist;
+
+    var form = $('<form action="/api/v1/download" method="post" target="_self" style="display: none"></form>');
+    var song_name_input = $('<input type="text" name="song_name" style="display: none" />');
+    var platform_input = $('<input type="text" name="platform" style="display: none" />');
+    var song_id_input = $('<input type="text" name="song_id" style="display: none" />');
+
+    song_name_input.attr('value', song_name);
+    platform_input.attr('value', platform);
+    song_id_input.attr('value', song_id);
+
+    form.append(song_name_input);
+    form.append(platform_input);
+    form.append(song_id_input);
+    $(document.body).append(form);
+    form.submit();
+
 }

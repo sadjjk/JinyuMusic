@@ -1,9 +1,14 @@
 import gevent
 from . import api
-from flask import request, jsonify
+from flask import request, jsonify, Response, current_app
 from Music import platforms
 from .utils import platform_required, get_all_platform
 from itertools import zip_longest
+from urllib.parse import quote
+import urllib
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 @api.route('/song_play_url', methods=['GET'])
@@ -17,6 +22,36 @@ def get_song_play_url():
                     'errmsg': 'OK',
                     'data': play_dict
                     })
+
+
+@api.route('/download', methods=['POST'])
+def download_song():
+    platform = request.form.get('platform')
+    song_id = request.form.get('song_id')
+    song_name = request.form.get('song_name')
+
+    music_obj = getattr(platforms, platform)()
+    play_url = music_obj.get_song_play_url(song_id).get('play_url')
+
+    r = urllib.request.urlopen(quote(play_url, safe='&/:?='))
+
+    response = Response(
+        r,
+        content_type=r.headers['content-type'],
+    )
+
+    header = 'attachment; filename={0}; filename*=utf-8''{0}'.format(quote(song_name) + '.mp3')
+    response.headers["Content-Disposition"] = header
+    response.headers["Content-Length"] = r.headers['Content-Length']
+
+    current_app.logger.info('开始下载音乐:{}'.format(song_name))
+    try:
+        ip = request.headers['X-Forwarded-For'].split(',')[0]
+    except:
+        ip = request.remote_addr
+    current_app.logger.info('下载IP:{}\n'.format(ip))
+
+    return response
 
 
 @api.route('/song_lyric', methods=['GET'])
