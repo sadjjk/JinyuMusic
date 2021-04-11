@@ -614,6 +614,15 @@
         preload: 'metadata',
         audio: []
     });
+
+
+    ap.on('ended', function () {
+        ap.audio.pause()
+    });
+
+    ap.on('loadstart', function () {
+        ap.audio.play()
+    });
 </script>
 
 </html>

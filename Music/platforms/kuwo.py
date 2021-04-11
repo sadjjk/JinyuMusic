@@ -357,6 +357,6 @@ if __name__ == '__main__':
     # kuwo.get_song_lyric('142655450')
     # kuwo.get_album_detail('14968708')
     # kuwo.get_artist_detail('896')
-    kuwo.get_playlist_detail('3130463678')
+    # kuwo.get_playlist_detail('3130463678')
     kuwo.get_toplist_detail('145')
     # kuwo.search('彩虹')
