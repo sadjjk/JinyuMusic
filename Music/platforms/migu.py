@@ -14,6 +14,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 import time
 import os
+from Music.lib.message import WeChatMessage
 
 
 class MiguMusic(BaseMusic):
@@ -21,12 +22,8 @@ class MiguMusic(BaseMusic):
 
     def __init__(self):
         super(MiguMusic, self).__init__()
-        self.phone_number = 'xxxx'  # 咪咕音乐账号
-        self.password = 'xxxx'  # 咪咕音乐密码
         self.headers['Referer'] = 'http://music.migu.cn/v3/music/player/audio?from=migu'
         self.cookies_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migu_cookies')
-        if os.path.exists(self.cookies_path):
-            self.save_cookies(self.phone_number, self.password)
 
     def _pad(self, data):
         length = 16 - (len(data) % 16)
@@ -181,12 +178,12 @@ class MiguMusic(BaseMusic):
             cookies = json.load(f)
         song_json = requests.get(target_url, headers=self.headers, cookies=cookies).json()
 
-        # 若cookies失效则重试
+        # 若cookies失效则通知
         if song_json.get('returnCode') != '000000':
-            self.save_cookies(self.phone_number, self.password)
-            with open(self.cookies_path, 'r') as f:
-                cookies = json.load(f)
-            song_json = requests.get(target_url, headers=self.headers, cookies=cookies).json()
+            WeChatMessage.send(title='ERROR 咪咕音乐Cookies已失效!',
+                               content='咪咕音乐Cookies已失效 请重新登陆 更新Cookies')
+
+            assert AssertionError('ERROR 咪咕音乐Cookies已失效!')
 
         play_url = 'https:' + song_json['data'].get('playUrl')
         return {'platform': self.__class__.__name__,
@@ -562,10 +559,10 @@ class MiguMusic(BaseMusic):
 
 if __name__ == '__main__':
     migu_music = MiguMusic()
-    migu_music.get_song_play_url('6005971JTR1')
+    migu_music.get_song_play_url('6005479Z069')
     # migu_music.get_playlist_detail('179812779')
     # migu_music.get_toplist_detail('jianjiao_hotsong')
-    # migu_music.search('Mojito')
+    migu_music.search('Mojito')
     # migu_music.get_artist_detail(1004674393)
     # migu_music.get_album_detail('1136487194')
 
