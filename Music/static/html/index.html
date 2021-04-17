@@ -164,10 +164,10 @@
                         </script>
                         <div class="site-wrapper-innerd">
                             <div class="cover-container">
-                                <ul class="playlist-covers">
+                                <ul class="playlist-covers ">
                                     <script id="playlist-tmp" type="text/html">
                                         {{ each playlists as playlist}}
-                                        <li class="ng-scope">
+                                        <li class="ng-scope {{class_name}}">
                                             <div class="u-cover"><img
                                                     src="{{ playlist.img_url }}"
                                                     onclick="{{func}}('{{playlist.id}}','{{playlist.platform}}')">
@@ -184,8 +184,9 @@
                                         </li>
                                         {{/each}}
                                     </script>
-
                                 </ul>
+
+
                                 <div class="loading_bottom">
                                     <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg"
                                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

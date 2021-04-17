@@ -9,10 +9,7 @@ from Crypto.Cipher import AES
 import base64
 from hashlib import md5
 from urllib import parse
-from selenium import webdriver
-from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.options import Options
-import time
+
 import os
 from Music.lib.message import WeChatMessage
 

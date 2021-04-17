@@ -321,18 +321,21 @@ function showPlaylist(obj, platform, page_num = 1, page_size = 40) {
                 _currPage = 1;
                 $(".playlist-covers").html(template("playlist-tmp", {
                     playlists: [],
-                    func: 'showPlaylistDetail'
+                    func: 'showPlaylistDetail',
+                    class_name: 'playlist'
                 }));
                 setTimeout(function () {
                     $(".playlist-covers").html(template("playlist-tmp", {
                         playlists: resp.data,
-                        func: 'showPlaylistDetail'
+                        func: 'showPlaylistDetail',
+                        class_name: 'playlist'
                     }));
                 }, 300);
             } else {
                 $(".playlist-covers").append(template("playlist-tmp", {
                     playlists: resp.data,
-                    func: 'showPlaylistDetail'
+                    func: 'showPlaylistDetail',
+                    class_name: 'playlist'
                 }));
             }
 
@@ -365,10 +368,6 @@ async function showRecommendPlaylist(obj) {
 
     const pre_platform = $('.recommand-page .source-button.active').attr('id');
 
-    $(".playlist-covers").html(template("playlist-tmp", {
-        playlists: [],
-        func: 'showPlaylistDetail'
-    }));
     const getPlatform = () => new Promise(resolve => {
         $.get("/api/v1/platform", function (resp) {
             const data = resp.data.filter(item => item.is_support_playlist > 0);
@@ -389,7 +388,17 @@ async function showRecommendPlaylist(obj) {
         });
     })
     const _platform = await getPlatform();
-    showPlaylist($('#' + _platform), _platform, 1)
+
+    $('li.toplist').addClass('ng-hide');
+    if ($('li.playlist').length === 0) {
+        showPlaylist($('#' + _platform), _platform, 1)
+    } else {
+        $('#' + _platform).siblings('.source-button').filter('.active').removeClass('active');
+        $('#' + _platform).addClass('active');
+        $('li.playlist').removeClass('ng-hide');
+
+    }
+
 
     const browserEle = document.querySelector('.browser.flex-scroll-wrapper');
     browserEle.addEventListener('scroll', handlePlayScroll);
@@ -397,14 +406,9 @@ async function showRecommendPlaylist(obj) {
 
 // 点击展示排行榜
 function showToplist(obj, platform) {
+    $('li.toplist').remove();
     $(obj).siblings('.source-button').filter('.active').removeClass('active');
     $(obj).addClass('active');
-
-    $(".playlist-covers").html(template("playlist-tmp", {
-        playlists: [],
-        func: 'showToplistDetail'
-    }));
-
     $.ajax({
         url: '/api/v1/toplist',
         type: 'get',
@@ -412,9 +416,10 @@ function showToplist(obj, platform) {
         data: {'platform': platform},
         timeout: 5000,
         success: function (resp) {
-            $(".playlist-covers").html(template("playlist-tmp", {
+            $(".playlist-covers").append(template("playlist-tmp", {
                 playlists: resp.data,
-                func: 'showToplistDetail'
+                func: 'showToplistDetail',
+                class_name: 'toplist'
             }));
         }
     });
@@ -452,7 +457,18 @@ function showRecommendToplist(obj) {
             })[0].name;
 
         }
-        showToplist($('#' + platform), platform)
+
+
+        $('li.playlist').addClass('ng-hide');
+        if ($('li.toplist').length === 0) {
+            showToplist($('#' + platform), platform)
+        } else {
+            $('#' + platform).siblings('.source-button').filter('.active').removeClass('active');
+            $('#' + platform).addClass('active');
+            $('li.toplist').removeClass('ng-hide')
+        }
+
+
     });
 
 }
@@ -683,10 +699,19 @@ function showArtistlist(artist_id, platform) {
 
 }
 
-// 显示设置页
+// 显示设置页 如果已显示 再次点击还原之前页面
 function showSettings() {
-    $('.setting-page').removeClass('ng-hide');
-    $('.setting-page').siblings().addClass('ng-hide');
+
+    if ($('.setting-page.ng-hide').length === 1) {
+        $('.page:not(.ng-hide)').addClass('pre-hide');
+        $('.setting-page').removeClass('ng-hide');
+        $('.setting-page').siblings().addClass('ng-hide');
+    } else {
+        $('.setting-page').addClass('ng-hide');
+        $('.page.pre-hide').removeClass('ng-hide');
+        $('.page.pre-hide').removeClass('pre-hide');
+    }
+
 }
 
 
