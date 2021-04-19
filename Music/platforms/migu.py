@@ -8,10 +8,8 @@ from Crypto import Random
 from Crypto.Cipher import AES
 import base64
 from hashlib import md5
-from urllib import parse
-
 import os
-from Music.lib.message import WeChatMessage
+
 
 
 class MiguMusic(BaseMusic):
