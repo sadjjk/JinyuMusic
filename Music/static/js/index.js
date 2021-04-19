@@ -154,12 +154,10 @@ function showSongDetailDialog(flag = 1) {
                 var audioCurrentTime = this.currentTime;
 
                 if (this.ended) {
-                    setTimeout(function () {
                         $('.playsong-detail').html(template('song-detail-tmpl',
                             {}
                         ));
-                        showSongDetailWindow()
-                    }, 1000);
+
                 }
 
                 const scrollTop = document.getElementById('lyric').scrollTop;

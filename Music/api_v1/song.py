@@ -17,11 +17,16 @@ def get_song_play_url():
     platform = request.args.get('platform', 'NeteaseMusic')
     song_id = request.args.get('song_id')
     music_obj = getattr(platforms, platform)()
-    play_dict = music_obj.get_song_play_url(song_id)
-    return jsonify({'code': 200,
-                    'errmsg': 'OK',
-                    'data': play_dict
-                    })
+    try:
+        play_dict = music_obj.get_song_play_url(song_id)
+        return jsonify({'code': 200,
+                        'errmsg': 'OK',
+                        'data': play_dict
+                        })
+    except Exception as e:
+        return jsonify({'code': 500,
+                        'errmsg': str(e),
+                        })
 
 
 @api.route('/download', methods=['POST'])

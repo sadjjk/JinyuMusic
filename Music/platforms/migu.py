@@ -159,6 +159,8 @@ class MiguMusic(BaseMusic):
         :return: 返回歌曲播放地址
         '''
 
+        '''
+        更换了接口 不需要再加密和登陆
         publicKey = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8asrfSaoOb4je+DSmKdriQJKW\nVJ2oDZrs3wi5W67m3LwTB9QVR+cE3XWU21Nx+YBxS0yun8wDcjgQvYt625ZCcgin\n2ro/eOkNyUOTBIbuj9CvMnhUYiR61lC1f1IGbrSYYimqBVSjpifVufxtx/I3exRe\nZosTByYp4Xwpb1+WAQIDAQAB\n-----END PUBLIC KEY-----"
         key = '4ea5c508a6566e76240543f8feb06fd457777be39549c4016436afda65d2330e'
 
@@ -167,24 +169,26 @@ class MiguMusic(BaseMusic):
 
         aesResult = parse.quote(
             self._aes_encrypt('{{"copyrightId":"{}","type":2,"auditionsFlag":0}}'.format(song_id), key))
-
         target_url = 'http://music.migu.cn/v3/api/music/audioPlayer/getPlayInfo?dataType=2&data={aesResult}&secKey={secKey}'.format(
             aesResult=aesResult, secKey=secKey)
+        '''
+        target_url = f'https://c.musicapp.migu.cn/MIGUM2.0/v1.0/content/resourceinfo.do?copyrightId={song_id}&resourceType=2'
+        song_json = requests.get(target_url, headers=self.headers).json()
+        if song_json.get('code') == '000000' and song_json.get('resource') and song_json.get('resource')[0].get(
+                'rateFormats'):
+            type_list = ['PQ', 'HQ', 'SQ']
+            song_rate_formats = [song for song in song_json.get('resource')[0].get('rateFormats') if
+                                 song.get('formatType') in type_list]
 
-        with open(self.cookies_path, 'r') as f:
-            cookies = json.load(f)
-        song_json = requests.get(target_url, headers=self.headers, cookies=cookies).json()
+            first_song = sorted(song_rate_formats, key=lambda x: type_list.index(x.get('formatType')))[0]
 
-        # 若cookies失效则通知
-        if song_json.get('returnCode') != '000000':
-            WeChatMessage.send(title='ERROR 咪咕音乐Cookies已失效!',
-                               content='咪咕音乐Cookies已失效 请重新登陆 更新Cookies')
+            first_song_url = first_song.get('url') if first_song.get('url') else first_song.get('androidUrl')
+            play_url = re.sub('ftp:\/\/[^/]+', 'https://freetyst.nf.migu.cn', first_song_url)
+            return {'platform': self.__class__.__name__,
+                    'play_url': play_url}
+        else:
+            raise AssertionError(f'咪咕音乐播放地址获取失败! 详情:{song_json}')
 
-            assert AssertionError('ERROR 咪咕音乐Cookies已失效!')
-
-        play_url = 'https:' + song_json['data'].get('playUrl')
-        return {'platform': self.__class__.__name__,
-                'play_url': play_url}
 
     # 获取歌曲歌词
     def get_song_lyric(self, song_id):
@@ -509,7 +513,7 @@ class MiguMusic(BaseMusic):
             'source_url': 'https://music.migu.cn/v3/music/song/{}'.format(data.get('copyrightId')),
             'platform': self.__class__.__name__,
             'platform_name': self.__class__.title
-        } for data in search_info.get('songResultData').get('result') if data.get('isInSalesPeriod') != '1']
+        } for data in search_info.get('songResultData').get('result')] #if data.get('isInSalesPeriod') != '1']
 
         return {
             'list': result,
@@ -556,7 +560,7 @@ class MiguMusic(BaseMusic):
 
 if __name__ == '__main__':
     migu_music = MiguMusic()
-    migu_music.get_song_play_url('6005479Z069')
+    # migu_music.get_song_play_url('6005479Z069')
     # migu_music.get_playlist_detail('179812779')
     # migu_music.get_toplist_detail('jianjiao_hotsong')
     migu_music.search('Mojito')
