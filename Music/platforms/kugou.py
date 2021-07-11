@@ -1,9 +1,33 @@
 from Music.platforms import BaseMusic
 import requests
+import hashlib
+import time
+import json
+import execjs
 
 
 class KugouMusic(BaseMusic):
     title = '酷狗音乐'
+
+    def _random_string(self):
+        """
+        生成随机字符串
+        :return:
+        """
+        generate_string = execjs.eval('(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)')
+        return generate_string
+
+    def _hash_md5(self):
+        """
+        MD5加密
+        :return: 返回加密后的字符串
+        """
+        # 组合随机字符串
+        string = self._random_string() + self._random_string() + '-' + self._random_string() + '-' + self._random_string() + '-' + self._random_string() + '-' + self._random_string() + self._random_string() + self._random_string()
+        hash_ = hashlib.md5()
+        hash_.update(string.encode())
+        kg_mid = hash_.hexdigest()
+        return kg_mid
 
     def __init__(self):
         super(KugouMusic, self).__init__()
@@ -14,15 +38,35 @@ class KugouMusic(BaseMusic):
 
     # 获取歌曲播放地址
     def get_song_play_url(self, song_id):
-        target_url = 'http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash={}'.format(song_id)
-        response = requests.get(target_url,
-                                headers=self.headers)
 
+        # 该接口无法获取付费歌曲
+        # target_url = 'http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash={}'.format(song_id)
+        # response = requests.get(target_url,
+        #                         headers=self.headers)
+
+        # 获取歌曲详细信息 需要Cookie
+        # https://github.com/YungGuo08/WebSpider/blob/184daf776e538e36c109d9706409dee23ed40411/Music_Download/Kugou_Music/kg_mid_generator.py
+        cookie = {'kg_mid': 'aad44cc5d3cf31fe45f76e8c8561d8a3'}
+
+        target_url = 'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery&hash={}'.format(song_id)
+        response = requests.get(target_url, cookies=cookie)
         response.raise_for_status()
-        response_json = response.json()
+        response_json = json.loads(response.text.lstrip('jQuery(').rstrip(');\n'))
 
-        assert response_json.get('errcode') == 0, '酷狗音乐歌曲播放地址获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '', response.text)
-        play_url = response_json.get('url')
+        assert response_json.get('err_code') == 0, '酷狗音乐歌曲播放地址获取异常!\n请求地址:{}\n返回结果:{}'.format(target_url, response.text)
+        play_url = response_json.get('data').get('play_url')
+        album_id = response_json.get('data').get('album_id')
+
+        if not play_url:
+            target_url = 'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery&hash={}&album_id={}'.format(
+                song_id, album_id)
+            response = requests.get(target_url, cookies=cookie)
+            response.raise_for_status()
+            response_json = json.loads(response.text.lstrip('jQuery(').rstrip(');\n'))
+
+            assert response_json.get('err_code') == 0, '酷狗音乐歌曲播放地址获取异常!\n请求地址:{}\n返回结果:{}'.format(target_url,
+                                                                                                  response.text)
+            play_url = response_json.get('data').get('play_url')
 
         return {'platform': self.__class__.__name__,
                 'play_url': play_url}
@@ -51,7 +95,8 @@ class KugouMusic(BaseMusic):
         response = requests.get(target_url, headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐专辑详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐专辑详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                    response.text)
 
         album_info = response_json.get('data')
         source_url = 'https://www.kugou.com/album/{}.html'.format(album_id)
@@ -66,7 +111,8 @@ class KugouMusic(BaseMusic):
         response = requests.get(target_url, headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐专辑歌曲详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐专辑歌曲详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                      response.text)
 
         album_song_info = response_json['data']['info']
         song_list = [
@@ -101,7 +147,8 @@ class KugouMusic(BaseMusic):
         response = requests.get(target_url, headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐歌手详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐歌手详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                    response.text)
 
         artist_info = response_json.get('data')
         source_url = 'https://www.kugou.com/singer/{}.html'.format(artist_id)
@@ -113,7 +160,8 @@ class KugouMusic(BaseMusic):
         response = requests.get(target_url, headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐歌手歌曲详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐歌手歌曲详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                      response.text)
 
         artist_song_info = response_json['data']['info']
         song_list = [
@@ -246,7 +294,8 @@ class KugouMusic(BaseMusic):
                                 headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐排行榜歌单详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐排行榜歌单详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                       response.text)
 
         toplist_info = response_json.get('data')
         source_url = 'https://www.kugou.com/yy/rank/home/1-{}.html'.format(toplist_id),
@@ -260,7 +309,8 @@ class KugouMusic(BaseMusic):
                                 headers=self.headers)
         response.raise_for_status()
         response_json = response.json()
-        assert response_json.get('errcode') == 0, '酷狗音乐排行榜歌单详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('errcode') == 0, '酷狗音乐排行榜歌单详情获取异常!\n请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                       response.text)
         toplist_song_info = response_json['data']['info']
         song_list = [
             {'song_id': song.get('hash'),
@@ -287,16 +337,48 @@ class KugouMusic(BaseMusic):
 
     # 搜索
     def search(self, keyword, page_num=1, page_size=20):
-        target_url = 'http://songsearch.kugou.com/song_search_v2?keyword={}&page={}&pagesize={}'.format(keyword,
-                                                                                                        page_num,
-                                                                                                        page_size)
-        response = requests.get(target_url,
-                                headers=self.headers)
 
+        # target_url = 'http://songsearch.kugou.com/song_search_v2?keyword={}&page={}&pagesize={}'.format(
+        #     keyword,
+        #     page_num,
+        #     page_size)
+        # response = requests.get(target_url,
+        #                         headers=self.headers)
+
+        target_url = 'https://complexsearch.kugou.com/v2/search/song'
+
+        now = round(time.time() * 1000)
+        text = '''NVPh5oo715z5DIWAeQlhMDsWXXQV4hwtbitrate=0callback=jQueryclienttime=%sclientver=2000dfid=-inputtype=0iscorrection=1isfuzzy=0keyword=%smid=%spage=%dpagesize=%dplatform=WebFilterprivilege_filter=0srcappid=2919tag=emuserid=-1uuid=%sNVPh5oo715z5DIWAeQlhMDsWXXQV4hwt''' % (
+            now, keyword, now, page_num, page_size, now)
+        sign = hashlib.md5(text.encode('utf-8')).hexdigest()
+        parameters = {
+            'callback': 'jQuery',
+            'keyword': keyword,
+            'page': str(page_num),
+            'pagesize': str(page_size),
+            'bitrate': '0',
+            'isfuzzy': '0',
+            'tag': 'em',
+            'inputtype': '0',
+            'platform': 'WebFilter',
+            'userid': '-1',
+            'clientver': '2000',
+            'iscorrection': '1',
+            'privilege_filter': '0',
+            'srcappid': '2919',
+            'clienttime': now,
+            'mid': now,
+            'uuid': now,
+            'dfid': '-',
+            'signature': sign.upper()
+        }
+
+        response = requests.get(target_url, params=parameters)
         response.raise_for_status()
-        response_json = response.json()
+        response_json = json.loads(response.text.lstrip('jQuery(').rstrip(')\n'))
 
-        assert response_json.get('error_code') == 0, '酷狗音乐搜索歌曲失败!请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',response.text)
+        assert response_json.get('error_code') == 0, '酷狗音乐搜索歌曲失败!请求地址:{}\n请求参数:{}\n返回结果:{}'.format(target_url, '',
+                                                                                                   response.text)
 
         search_info = response_json.get('data')
 
@@ -304,8 +386,10 @@ class KugouMusic(BaseMusic):
         if search_info.get('lists'):
             result = [
                 {'song_id': song.get('FileHash'),
-                 'title': song.get('OriSongName'),
-                 'artist': song.get('SingerName'),
+                 # 'title': song.get('OriSongName'),
+                 'title': song.get('SongName').replace('<em>', '').replace('</em>', ''),
+                 # 'artist': song.get('SingerName'),
+                 'artist': song.get('SingerName').replace('<em>', '').replace('</em>', ''),
                  'artist_id': song.get('SingerId')[0] if song.get('SingerId') and song.get('SingerId')[0] != 0 else '',
                  'album': song.get('AlbumName'),
                  'album_id': song.get('AlbumID'),
@@ -313,7 +397,7 @@ class KugouMusic(BaseMusic):
                  'source_url': 'https://www.kugou.com/song/#hash={}'.format(song.get('FileHash')),
                  'platform': self.__class__.__name__,
                  'platform_name': self.__class__.title
-                 } for song in search_info.get('lists') if self._is_playable(song.get('Privilege', 0))
+                 } for song in search_info.get('lists')
             ]
         else:
             result = []
@@ -323,12 +407,12 @@ class KugouMusic(BaseMusic):
 
 if __name__ == '__main__':
     kugou = KugouMusic()
-    # kugou.get_song_play_url('D86F27CE8274E2837C2E79C40BE8F8AA')
+    kugou.get_song_play_url('86C62136A60108030A7E7A4543502485')
     # kugou._get_song_info('1E52D25621767A487828053B34E70FA4')
     # kugou.get_album_detail('965221')
     # kugou.get_playlist_detail('3397773')
     # kugou.get_artist_detail('3525')
-    kugou.get_toplist_detail('6666')
+    # kugou.get_toplist_detail('6666')
     # kugou.get_recommend_playlist()
-    # kugou.search('111')
-    kugou.get_toplist()
+    kugou.search('我的心太乱')
+    # kugou.get_toplist()

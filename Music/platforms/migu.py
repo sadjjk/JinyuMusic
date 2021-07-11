@@ -11,7 +11,6 @@ from hashlib import md5
 import os
 
 
-
 class MiguMusic(BaseMusic):
     title = '咪咕音乐'
 
@@ -81,7 +80,7 @@ class MiguMusic(BaseMusic):
         content = response.text
 
         playlist_re = re.findall(
-            r'<li>.*?data-original="(.*?)" class="img-full.*?data-id="(.*?)" data-origin=.*?title=".*?">(.*?)</a>.*?<i class="iconfont cf-bofangliang"></i>\n(.*?)\n</div>\n</div>\n<div class="item-action">.*?</li>',
+            r'<li>.*?data-original="(.*?)" class="img-full.*?data-id="(.*?)" data-origin=.*?title=".*?">(.*?)</a>.*?<i class="iconfont cf-bofangliang"></i>\n(.*?)\n</div>\n<div class="song-list-desc clearfix">\n</div>\n<div class="item-action">',
             content, re.S)
 
         assert playlist_re, '咪咕音乐推荐歌单异常!\nURL:{}\n正则匹配失败'.format(target_url)
@@ -186,7 +185,6 @@ class MiguMusic(BaseMusic):
                     'play_url': play_url}
         else:
             raise AssertionError(f'咪咕音乐播放地址获取失败! 详情:{song_json}')
-
 
     # 获取歌曲歌词
     def get_song_lyric(self, song_id):
@@ -511,7 +509,7 @@ class MiguMusic(BaseMusic):
             'source_url': 'https://music.migu.cn/v3/music/song/{}'.format(data.get('copyrightId')),
             'platform': self.__class__.__name__,
             'platform_name': self.__class__.title
-        } for data in search_info.get('songResultData').get('result')] #if data.get('isInSalesPeriod') != '1']
+        } for data in search_info.get('songResultData').get('result')]  # if data.get('isInSalesPeriod') != '1']
 
         return {
             'list': result,
