@@ -2078,11 +2078,12 @@
                             });
                         var t = void 0;
                         this.on("error", function () {
-                            e.list.audios.length > 1 ? (e.notice("An audio error has occurred, player will skip forward in 2 seconds."),
+                            e.list.audios.length > 1 ? (e.notice("暂无法播放该歌曲源 2秒自动跳过"),
                                 t = setTimeout(function () {
+                                    e.list.remove(e.list.index),
                                     e.skipForward(),
                                     e.paused || e.play()
-                                }, 2e3)) : 1 === e.list.audios.length && e.notice("An audio error has occurred.")
+                                }, 2e3)) : 1 === e.list.audios.length && e.notice("暂无法播放该歌曲源")
                         }),
                             this.events.on("listswitch", function () {
                                 t && clearTimeout(t)

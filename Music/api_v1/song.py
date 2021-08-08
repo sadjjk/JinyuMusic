@@ -2,6 +2,7 @@ import gevent
 from . import api
 from flask import request, jsonify, Response, current_app
 from Music import platforms
+from Music.platforms import QingtingFM
 from .utils import platform_required, get_all_platform
 from itertools import zip_longest
 from urllib.parse import quote
@@ -16,7 +17,11 @@ ssl._create_default_https_context = ssl._create_unverified_context
 def get_song_play_url():
     platform = request.args.get('platform', 'NeteaseMusic')
     song_id = request.args.get('song_id')
-    music_obj = getattr(platforms, platform)()
+
+    if platform == 'QingtingFM':
+        music_obj = QingtingFM()
+    else:
+        music_obj = getattr(platforms, platform)()
     try:
         play_dict = music_obj.get_song_play_url(song_id)
         return jsonify({'code': 200,
@@ -64,7 +69,11 @@ def download_song():
 def get_song_lyric():
     platform = request.args.get('platform', 'NeteaseMusic')
     song_id = request.args.get('song_id')
-    music_obj = getattr(platforms, platform)()
+
+    if platform == 'QingtingFM':
+        music_obj = QingtingFM()
+    else:
+        music_obj = getattr(platforms, platform)()
     lyric_dict = music_obj.get_song_lyric(song_id)
     return jsonify({'code': 200,
                     'errmsg': 'OK',

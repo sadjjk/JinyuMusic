@@ -83,12 +83,17 @@
                         <div class="title">平台聚合</div>
                     </div>
                     <ul class="nav masthead-nav">
-                        <li onclick="showRecommendToplist(this)"><span class="icon li-featured-list"></span><a>排行榜</a>
+                        <li onclick="showRecommendToplist(this)">
+                            <span class="icon li-featured-list"></span><a>排行榜</a>
                         </li>
                     </ul>
                     <ul class="nav masthead-nav">
-                        <li class="active" onclick="showRecommendPlaylist(this)"><span
-                                class="icon li-featured-list"></span><a>推荐歌单</a></li>
+                        <li class="active" onclick="showRecommendPlaylist(this)">
+                            <span class="icon li-featured-list"></span><a>推荐歌单</a></li>
+                    </ul>
+                    <ul class="nav masthead-nav">
+                        <li  onclick="showRecommendFMlist(this)">
+                            <span class="icon li-featured-list"></span><a>广播电台</a></li>
                     </ul>
                     <div class="menu-title">
                         <div class="title">我的歌单</div>
@@ -157,7 +162,7 @@
                         <script id="platforms-tmpl" type="text/html">
                             {{ each platforms as platform}}
                             <div id="{{platform.name}}" class="source-button "
-                                 onclick="{{func}}(this,'{{platform.name}}')">{{platform.title}}
+                                 onclick="{{func}}(this,'{{ platform.name}}')">{{platform.title}}
                             </div>
                             <div class="splitter"></div>
                             {{/each}}
@@ -392,8 +397,13 @@
                                     <div class="title"><a>歌曲名({{songlist.song_total}})</a>
                                     </div>
                                     <div class="source"><a>来源</a></div>
+                                    {{ if songlist.platform!='QingtingFM' }}
                                     <div class="artist"><a>歌手</a></div>
+                                    {{ /if }}
                                     <div class="album"><a>专辑名</a></div>
+                                    {{ if songlist.platform=='QingtingFM' }}
+                                    <div class="artist"><a>开始时间</a></div>
+                                    {{ /if }}
                                     <div class="tools">操作</div>
                                 </li>
                                 {{ each songlist.song_list as song }}
@@ -410,14 +420,19 @@
                                                            target="_blank"
                                                            style="text-decoration:none;color: var(--text-default-color)">{{song.platform_name}}</a>
                                     </div>
+                                    {{ if song.artist_id }}
                                     <div class="artist"><a
                                             onclick="showArtistlist('{{song.artist_id}}','{{song.platform}}')"
                                             class="ng-binding"
                                             data-value='{{song.artist_id}}'>{{song.artist}}</a></div>
+                                    {{ /if }}
                                     <div class="album"><a
                                             onclick="showAlbumlist('{{song.album_id}}','{{song.platform}}')"
                                             class="ng-binding" data-value='{{song.album_id}}'>{{song.album}}</a>
                                     </div>
+                                    {{ if song.start_time }}
+                                    <div class="artist">{{song.start_time}}</div>
+                                    {{ /if }}
                                     <div class="tools">
                                         <a title="添加到当前播放" class="detail-add-button ng-isolate-scope ng-hide"
                                            onclick="addSongToPlayer(this,0)">
@@ -435,6 +450,7 @@
                                            style="text-decoration:none">
                                             <span class="icon li-link"></span>
                                         </a>
+                                        {{ if songlist.platform!='QingtingFM' | $index != 0 }}
                                         <a title="下载" class="ng-hide"
                                            onclick="downloadMusic(this)">
                                              <span class="icon">
@@ -447,6 +463,7 @@
                                                          fill="#707070" p-id="2194"></path></svg>
                                              </span>
                                         </a>
+                                        {{/if}}
                                     </div>
                                 </li>
                                 {{/each}}

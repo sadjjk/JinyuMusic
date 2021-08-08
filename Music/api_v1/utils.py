@@ -31,7 +31,7 @@ def platform_required(view_func):
 
         platform_list = get_all_platform()
 
-        if platform not in [i['name'] for i in platform_list]:
+        if platform not in [i['name'] for i in platform_list] and platform != 'QingtingFM':
             return jsonify(code=500, errmsg=f'{platform} 该音乐平台不存在!')
         else:
 

@@ -6,3 +6,4 @@ from .migu import MiguMusic
 from .kugou import KugouMusic
 from .kuwo import KuwoMusic
 # from .qianqian import QianqianMusic
+from .qingtingfm import QingtingFM
