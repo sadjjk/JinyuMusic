@@ -306,6 +306,7 @@ function showPlaylist(obj, platform, page_num = 1, page_size = 40) {
     $(obj).siblings('.source-button').filter('.active').removeClass('active');
     $(obj).addClass('active');
 
+
     $('.loading_bottom').removeClass('ng-hide');
 
     $.ajax({
@@ -388,6 +389,8 @@ async function showRecommendPlaylist(obj) {
     const _platform = await getPlatform();
 
     $('li.toplist').addClass('ng-hide');
+    $('li.fmlist').addClass('ng-hide');
+
     if ($('li.playlist').length === 0) {
         showPlaylist($('#' + _platform), _platform, 1)
     } else {
@@ -404,6 +407,7 @@ async function showRecommendPlaylist(obj) {
 
 // 点击展示排行榜
 function showToplist(obj, platform) {
+    $('.playlist-covers li').addClass('ng-hide');
     $('li.toplist').remove();
     $(obj).siblings('.source-button').filter('.active').removeClass('active');
     $(obj).addClass('active');
@@ -438,6 +442,10 @@ function showRecommendToplist(obj) {
 
     const pre_platform = $('.source-button.active').attr('id');
 
+    $('li.playlist').addClass('ng-hide');
+    $('li.fmlist').addClass('ng-hide');
+
+
     $.get("/api/v1/platform", function (resp) {
 
         const data = resp.data.filter(item => item.is_support_toplist > 0);
@@ -470,6 +478,65 @@ function showRecommendToplist(obj) {
     });
 
 }
+
+
+// 左侧点击展示广播电台
+function showRecommendFMlist(obj) {
+    $('.recommand-page').removeClass('ng-hide');
+    $('.recommand-page').siblings().addClass('ng-hide');
+    $('.nav.masthead-nav li').filter('.active').removeClass('active');
+    $(obj).addClass('active');
+
+    const browserEle = document.querySelector('.browser.flex-scroll-wrapper');
+    browserEle.removeEventListener('scroll', handlePlayScroll);
+
+    $.get("/api/v1/fm/cate", function (resp) {
+
+        const data = resp.data;
+        $(".recommand-page .source-list").html(template("platforms-tmpl", {
+            platforms: data,
+            func: 'showFMlist'
+        }));
+
+        platform = data[0].name;
+
+        $('.playlist-covers li').addClass('ng-hide');
+
+        showFMlist($('#' + platform), platform)
+
+
+    });
+
+}
+
+
+// 点击展示电台
+function showFMlist(obj, cate_id) {
+    $('.playlist-covers li').addClass('ng-hide');
+    $('li.fmlist').remove();
+    $(obj).siblings('.source-button').filter('.active').removeClass('active');
+    $(obj).addClass('active');
+    $.ajax({
+        url: '/api/v1/fm/radio',
+        type: 'get',
+        dataType: 'json',
+        data: {'cate_id': cate_id},
+        timeout: 5000,
+        success: function (resp) {
+            $(".playlist-covers").append(template("playlist-tmp", {
+                playlists: resp.data,
+                func: 'showFMlistDetail',
+                class_name: 'fmlist'
+            }));
+        }
+    });
+
+    $('.loading_bottom').addClass('ng-hide')
+
+}
+
+
+
 
 // 显示推荐歌单详情
 function showPlaylistDetail(playlist_id, platform) {
@@ -522,6 +589,56 @@ function showPlaylistDetail(playlist_id, platform) {
     });
 
 }
+
+
+// 显示电台详情
+function showFMlistDetail(radio_id, platform) {
+    $('.playlist-page').removeClass('ng-hide');
+    $('.playlist-page').siblings().addClass('ng-hide');
+    $('.playlist-page .playlist-detail').html(template("songlist-detail-tmpl", {
+        songlist: {
+            'img_url': '/static/images/loading.svg',
+            'title': '正在获取详情,请稍后',
+            'songlist': [],
+            'source_url': '',
+            'song_total': 0
+        }
+    }));
+    // 判断是否已收藏
+    var favoriteList = getLocalObj('favoriteList');
+    var isCollect = 0;
+    if (favoriteList) {
+        if (favoriteList.filter(item => item.songlist_type === 'fmlist' && item.songlist_id === radio_id && item.platform === platform).length > 0) {
+            isCollect = 1;
+        }
+    }
+
+    const params = {
+        'platform': platform,
+        'radio_id': radio_id
+    };
+
+    $.ajax({
+        url: '/api/v1/fm/radio/detail',
+        type: 'get',
+        dataType: 'json',
+        data: params,
+        timeout: 10000,
+        success: function (resp) {
+            $(".playlist-page .playlist-detail").html(template("songlist-detail-tmpl", {
+                songlist: resp.data,
+                isCollect: isCollect,
+                songlist_type: 'fmlist',
+                songlist_id: resp.data.radio_id,
+                from: 'playlist'
+            }));
+        }
+    });
+
+}
+
+
+
 
 // 显示排行榜详情
 function showToplistDetail(toplist_id, platform) {
@@ -605,6 +722,8 @@ function showFavoriteDetail(obj, songlist_type, songlist_id, platform) {
         showAlbumlist(songlist_id, platform)
     } else if (songlist_type === 'artist') {
         showArtistlist(songlist_id, platform)
+    } else if (songlist_type === 'fmlist') {
+        showFMlistDetail(songlist_id,platform)
     }
 }
 

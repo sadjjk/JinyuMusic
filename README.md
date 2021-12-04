@@ -2,7 +2,7 @@
 
 ![Github stars](https://img.shields.io/github/stars/sadjjk/JinyuMusic.svg)   ![GitHub last commit](https://img.shields.io/github/last-commit/sadjjk/JinyuMusic)   ![GitHub forks](https://img.shields.io/github/forks/sadjjk/JinyuMusic?style=social)
 
-[在线聚合音乐平台](http://www.wjinyu.top:666/)
+[在线聚合音乐平台](https://music.wjinyu.top/)
 
 ![sTqgfI.png](https://s3.ax1x.com/2021/01/23/sTqgfI.png)
 

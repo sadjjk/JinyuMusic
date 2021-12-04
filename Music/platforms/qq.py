@@ -27,8 +27,11 @@ class QQMusic(BaseMusic):
 
     def _is_playable(self, num):
 
-        play_flag = (num != 1) and (int(bin(num)[2:-1][::-1][0]) == 1)
-        return play_flag
+        switch_flag = bin(num)[2:-1][::-1]
+        play_flag = str(switch_flag[0])
+        try_flag = str(switch_flag[13])
+        #play_flag = (num != 1) and (int(bin(num)[2:-1][::-1][0]) == 1)
+        return (play_flag == '1') or (play_flag == '1' and try_flag == '1')
 
     # 获取歌曲播放地址
     def get_song_play_url(self, song_id):
@@ -315,7 +318,8 @@ class QQMusic(BaseMusic):
 
     # 搜索
     def search(self, keyword, page_num=1, page_size=20):
-        target_url = f'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp?format=json&w={keyword}&p={page_num}&n={page_size}'
+        #target_url = f'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp?format=json&w={keyword}&p={page_num}&n={page_size}'
+        target_url = f'https://c.y.qq.com/soso/fcgi-bin/client_search_cp?g_tk=938407465&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&w={keyword}&zhidaqu=1&catZhida=1&t=0&flag=1&ie=utf-8&sem=1&aggr=0&perpage=20&n={page_size}&p={page_num}&remoteplace=txt.mqq.all&_=1459991037831'
         response = requests.get(target_url,
                                 headers=self.headers)
 
@@ -341,9 +345,9 @@ class QQMusic(BaseMusic):
                  'platform_name': self.__class__.title
                  } for song in search_info.get('list') if self._is_playable(song.get('switch'))
             ]
+
         else:
             result = []
-
         return {'list': result,'total': total}
 
 

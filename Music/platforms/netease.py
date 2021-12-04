@@ -17,6 +17,7 @@ class NeteaseMusic(BaseMusic):
         super(NeteaseMusic, self).__init__()
         self.headers['Referer'] = 'https://music.163.com/'
         self.headers['Host'] = 'music.163.com'
+        self.headers['Cookie']='NMTID=00ObjrW4lcyBXVHaUhokEyyj0yyAgoAAAF9a29GRg'
 
     def _create_secret_key(self, size):
         string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
